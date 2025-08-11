@@ -10,10 +10,9 @@ Welcome to my personal portfolio website! This repository contains the source co
 
 ```
 portfolio/
-├── index.html          # Main homepage
-├── html/              # HTML pages
-├── css/               # Stylesheets
-├── js/                # JavaScript files
+├── index.html         # Main homepage
+├── styles.css/        # Stylesheets
+├── script.js/         # JavaScript files
 ├── assets/            # All assets and resources
 │   ├── imgs/          # Images and graphics
 │   ├── fonts/         # Custom fonts
