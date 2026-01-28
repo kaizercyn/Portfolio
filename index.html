@@ -147,10 +147,11 @@
                         <span class="tech-tag">Roboflow</span>
                         <span class="tech-tag">Computer Vision</span>
                         <span class="tech-tag">Object Detection</span>
+                        <span class="tech-tag">HTML/CSS Generation</span>
                     </div>
                     <div class="project-links">
                         <a href="assets\papers\Snap2Site Automated Web Page Template Generation with Integrated Digital Branding.pdf" target="_blank">PDF →</a>
-                        <a href="https://github.com/kaizercyn/Snap2site" target="_blank">GitHub →</a>
+                        <a href="https://github.com/kaizercyn/Snap2Site" target="_blank">GitHub →</a>
                     </div>
                     </div>
                 </div>
@@ -229,22 +230,33 @@
         <h2>Get In Touch</h2>
         <div class="contact-content">
             <p>I'm always interested in new opportunities and collaborations. Let's connect!</p>
-            <div class="contact-info">
-                <div class="contact-item clickable-email" id="emailContact">
-                    <h3>Email</h3>
-                    <a href="javascript:void(0);">kaizergura@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <h3>Phone</h3>
-                    <a href="tel:+639763037542">+63 976 303 7542</a>
-                </div>
-                <div class="contact-item">
-                    <h3>LinkedIn</h3>
-                    <a href="https://linkedin.com/in/kaizergura" target="_blank">linkedin.com/in/kaizergura</a>
-                </div>
-                <div class="contact-item">
-                    <h3>GitHub</h3>
-                    <a href="https://github.com/kaizercyn" target="_blank">github.com/kaizercyn</a>
+            
+            <div class="message-form-container">
+                <button class="btn btn-primary btn-large" id="openFormBtn">
+                    Send Me a Message
+                </button>
+                <p class="form-description">Fill out a quick form and I'll get back to you soon</p>
+            </div>
+
+            <div class="direct-contact-section">
+                <h3 class="section-subtitle">Or Contact Me Directly</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>Email</h3>
+                        <a href="mailto:kaizergura@gmail.com">kaizergura@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Phone</h3>
+                        <a href="tel:+639763037542">+63 976 303 7542</a>
+                    </div>
+                    <div class="contact-item">
+                        <h3>LinkedIn</h3>
+                        <a href="https://linkedin.com/in/kaizergura" target="_blank">linkedin.com/in/kaizergura</a>
+                    </div>
+                    <div class="contact-item">
+                        <h3>GitHub</h3>
+                        <a href="https://github.com/kaizercyn" target="_blank">github.com/kaizercyn</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,21 +267,20 @@
         <p>&copy; 2025. All rights reserved.</p>
     </footer>
 
-    <!-- Contact Form Modal -->
     <div id="contactModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Send Me a Message</h3>
                 <button class="close-btn" id="closeModal">&times;</button>
             </div>
-            <form id="contactForm">
+            <form id="contactForm" action="https://formspree.io/f/mwvbebye" method="POST">
                 <div class="form-group">
                     <label for="senderName">Your Name *</label>
-                    <input type="text" id="senderName" name="senderName" required>
+                    <input type="text" id="senderName" name="name" required>
                 </div>
                 <div class="form-group">
                     <label for="senderEmail">Your Email *</label>
-                    <input type="email" id="senderEmail" name="senderEmail" required>
+                    <input type="email" id="senderEmail" name="email" required>
                 </div>
                 <div class="form-group">
                     <label for="company">Company/Organization</label>
@@ -283,15 +294,22 @@
                     <label for="message">Message *</label>
                     <textarea id="message" name="message" rows="6" required></textarea>
                 </div>
+                
+                <div id="successMessage" class="form-message success-message" style="display: none;">
+                    Thank you! Your message has been sent successfully.
+                </div>
+                <div id="errorMessage" class="form-message error-message" style="display: none;">
+                    Oops! Something went wrong. Please try again.
+                </div>
+
                 <div class="form-buttons">
                     <button type="button" class="btn btn-outline" id="backBtn">Back</button>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Send Message</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
     <div id="confirmModal" class="modal confirm-modal">
         <div class="modal-content confirm-content">
             <h3>Unsaved Changes</h3>

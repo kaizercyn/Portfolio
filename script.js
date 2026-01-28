@@ -73,32 +73,41 @@ function typeWriter(element, text, speed = 100) {
 // Initialize typing effect after page load
 window.addEventListener('load', function() {
     const heroTitle = document.querySelector('.hero h1');
-    const originalText = heroTitle.textContent;
-    typeWriter(heroTitle, originalText, 150);
+    if (heroTitle) {
+        const originalText = heroTitle.textContent;
+        typeWriter(heroTitle, originalText, 150);
+    }
 });
+
 // Contact Form Modal Functionality
 const contactModal = document.getElementById('contactModal');
 const confirmModal = document.getElementById('confirmModal');
-const emailContact = document.getElementById('emailContact');
+const openFormBtn = document.getElementById('openFormBtn');
 const closeModalBtn = document.getElementById('closeModal');
 const backBtn = document.getElementById('backBtn');
 const contactForm = document.getElementById('contactForm');
 const cancelLeaveBtn = document.getElementById('cancelLeave');
 const confirmLeaveBtn = document.getElementById('confirmLeave');
+const submitBtn = document.getElementById('submitBtn');
+const successMessage = document.getElementById('successMessage');
+const errorMessage = document.getElementById('errorMessage');
 
 let formDirty = false;
 
 // Track form changes
-contactForm.addEventListener('input', function() {
-    formDirty = true;
-});
+if (contactForm) {
+    contactForm.addEventListener('input', function() {
+        formDirty = true;
+    });
+}
 
-// Open modal when email is clicked
-emailContact.addEventListener('click', function(e) {
-    e.preventDefault();
-    contactModal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-});
+// Open modal when button is clicked
+if (openFormBtn) {
+    openFormBtn.addEventListener('click', function() {
+        contactModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+}
 
 // Close modal functions
 function closeContactModal() {
@@ -110,69 +119,123 @@ function closeContactModal() {
     }
 }
 
-closeModalBtn.addEventListener('click', closeContactModal);
-backBtn.addEventListener('click', closeContactModal);
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', closeContactModal);
+}
+
+if (backBtn) {
+    backBtn.addEventListener('click', closeContactModal);
+}
 
 // Close modal when clicking outside
-contactModal.addEventListener('click', function(e) {
-    if (e.target === contactModal) {
-        closeContactModal();
-    }
-});
+if (contactModal) {
+    contactModal.addEventListener('click', function(e) {
+        if (e.target === contactModal) {
+            closeContactModal();
+        }
+    });
+}
 
 // Confirmation modal - Cancel
-cancelLeaveBtn.addEventListener('click', function() {
-    confirmModal.classList.remove('show');
-});
+if (cancelLeaveBtn) {
+    cancelLeaveBtn.addEventListener('click', function() {
+        confirmModal.classList.remove('show');
+    });
+}
 
 // Confirmation modal - Confirm leave
-confirmLeaveBtn.addEventListener('click', function() {
-    confirmModal.classList.remove('show');
-    contactModal.classList.remove('show');
-    document.body.style.overflow = 'auto';
-    contactForm.reset();
-    formDirty = false;
-});
-
-// Form submission
-contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = {
-        name: document.getElementById('senderName').value,
-        email: document.getElementById('senderEmail').value,
-        company: document.getElementById('company').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-    };
-    
-    // Create mailto link with form data
-    const mailtoLink = `mailto:kaizergura@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-        `Name: ${formData.name}\n` +
-        `Email: ${formData.email}\n` +
-        `Company: ${formData.company || 'N/A'}\n\n` +
-        `Message:\n${formData.message}`
-    )}`;
-    
-    // Open user's email client
-    window.location.href = mailtoLink;
-    
-    // Close modal and reset
-    setTimeout(() => {
+if (confirmLeaveBtn) {
+    confirmLeaveBtn.addEventListener('click', function() {
+        confirmModal.classList.remove('show');
         contactModal.classList.remove('show');
         document.body.style.overflow = 'auto';
         contactForm.reset();
         formDirty = false;
-    }, 500);
-});
+    });
+}
+
+// Form submission with Formspree
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Hide previous messages
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        
+        // Disable submit button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        
+        try {
+            const formData = new FormData(contactForm);
+            
+            // Log form data for debugging (remove in production)
+            console.log('Form data being sent:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ': ' + value);
+            }
+            
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+            
+            if (response.ok) {
+                // Show success message
+                successMessage.style.display = 'block';
+                contactForm.reset();
+                formDirty = false;
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+                
+                // Auto-close modal after 3 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                    contactModal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                }, 3000);
+            } else {
+                // Try to get error details
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Form submission error:', errorData);
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            
+            // Show error message
+            errorMessage.style.display = 'block';
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Message';
+            
+            // Hide error message after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+    });
+}
 
 // Escape key to close modals
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        if (confirmModal.classList.contains('show')) {
+        if (confirmModal && confirmModal.classList.contains('show')) {
             confirmModal.classList.remove('show');
-        } else if (contactModal.classList.contains('show')) {
+        } else if (contactModal && contactModal.classList.contains('show')) {
             closeContactModal();
         }
     }
