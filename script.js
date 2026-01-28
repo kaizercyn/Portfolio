@@ -76,3 +76,104 @@ window.addEventListener('load', function() {
     const originalText = heroTitle.textContent;
     typeWriter(heroTitle, originalText, 150);
 });
+// Contact Form Modal Functionality
+const contactModal = document.getElementById('contactModal');
+const confirmModal = document.getElementById('confirmModal');
+const emailContact = document.getElementById('emailContact');
+const closeModalBtn = document.getElementById('closeModal');
+const backBtn = document.getElementById('backBtn');
+const contactForm = document.getElementById('contactForm');
+const cancelLeaveBtn = document.getElementById('cancelLeave');
+const confirmLeaveBtn = document.getElementById('confirmLeave');
+
+let formDirty = false;
+
+// Track form changes
+contactForm.addEventListener('input', function() {
+    formDirty = true;
+});
+
+// Open modal when email is clicked
+emailContact.addEventListener('click', function(e) {
+    e.preventDefault();
+    contactModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+});
+
+// Close modal functions
+function closeContactModal() {
+    if (formDirty) {
+        confirmModal.classList.add('show');
+    } else {
+        contactModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+closeModalBtn.addEventListener('click', closeContactModal);
+backBtn.addEventListener('click', closeContactModal);
+
+// Close modal when clicking outside
+contactModal.addEventListener('click', function(e) {
+    if (e.target === contactModal) {
+        closeContactModal();
+    }
+});
+
+// Confirmation modal - Cancel
+cancelLeaveBtn.addEventListener('click', function() {
+    confirmModal.classList.remove('show');
+});
+
+// Confirmation modal - Confirm leave
+confirmLeaveBtn.addEventListener('click', function() {
+    confirmModal.classList.remove('show');
+    contactModal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+    contactForm.reset();
+    formDirty = false;
+});
+
+// Form submission
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+        name: document.getElementById('senderName').value,
+        email: document.getElementById('senderEmail').value,
+        company: document.getElementById('company').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+    
+    // Create mailto link with form data
+    const mailtoLink = `mailto:kaizergura@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+        `Name: ${formData.name}\n` +
+        `Email: ${formData.email}\n` +
+        `Company: ${formData.company || 'N/A'}\n\n` +
+        `Message:\n${formData.message}`
+    )}`;
+    
+    // Open user's email client
+    window.location.href = mailtoLink;
+    
+    // Close modal and reset
+    setTimeout(() => {
+        contactModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        contactForm.reset();
+        formDirty = false;
+    }, 500);
+});
+
+// Escape key to close modals
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        if (confirmModal.classList.contains('show')) {
+            confirmModal.classList.remove('show');
+        } else if (contactModal.classList.contains('show')) {
+            closeContactModal();
+        }
+    }
+});

@@ -230,9 +230,9 @@
         <div class="contact-content">
             <p>I'm always interested in new opportunities and collaborations. Let's connect!</p>
             <div class="contact-info">
-                <div class="contact-item">
+                <div class="contact-item clickable-email" id="emailContact">
                     <h3>Email</h3>
-                    <a href="mailto:kaizergura@gmail.com">kaizergura@gmail.com</a>
+                    <a href="javascript:void(0);">kaizergura@gmail.com</a>
                 </div>
                 <div class="contact-item">
                     <h3>Phone</h3>
@@ -250,10 +250,58 @@
         </div>
     </section>
 
-<footer>
-    <img src="assets\imgs\kcg-logo.png" alt="KCG Logo" class="footer-logo">
-    <p>&copy; 2025. All rights reserved.</p>
-</footer>
+    <footer>
+        <img src="assets\imgs\kcg-logo.png" alt="KCG Logo" class="footer-logo">
+        <p>&copy; 2025. All rights reserved.</p>
+    </footer>
+
+    <!-- Contact Form Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send Me a Message</h3>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="senderName">Your Name *</label>
+                    <input type="text" id="senderName" name="senderName" required>
+                </div>
+                <div class="form-group">
+                    <label for="senderEmail">Your Email *</label>
+                    <input type="email" id="senderEmail" name="senderEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company/Organization</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" id="backBtn">Back</button>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal confirm-modal">
+        <div class="modal-content confirm-content">
+            <h3>Unsaved Changes</h3>
+            <p>You have unsaved changes. Are you sure you want to leave?</p>
+            <div class="form-buttons">
+                <button class="btn btn-outline" id="cancelLeave">Cancel</button>
+                <button class="btn btn-primary" id="confirmLeave">Leave</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
